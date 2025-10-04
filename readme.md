@@ -36,7 +36,7 @@ This proejct demonstrates a complete battery health monitoring system built with
 - **Features:** 18 engineered features (removed data leakage)
 - **Use Case:** State of Health (SOH) estimation, warranty cost prediction
 
-[📄 View Analysis →](notebooks/degradation.html) | [📋 Documentation](notebooks/degradation.md)
+[📄 View Analysis →](https://htmlpreview.github.io/?https://github.com/AmitNaikRepository/AI-Battery-SOH-Degradation-TS-Anomaly-NASA-Dataset/blob/main/notebooks/degradation.html) | [📋 Documentation](notebooks/degradation.md)
 
 **Key Results:**
 - Train R²: 0.95 | Test R²: 0.88
@@ -53,7 +53,7 @@ This proejct demonstrates a complete battery health monitoring system built with
 - **Architecture:** 2-layer LSTM (128→64 units)
 - **Prediction:** 10 cycles ahead using last 20 cycles
 
-[📄 View Analysis →](time_series_forcasting/Time_series.html) | [📋 Documentation](time_series_forcasting/README.md)
+[📄 View Analysis →](https://htmlpreview.github.io/?https://github.com/AmitNaikRepository/AI-Battery-SOH-Degradation-TS-Anomaly-NASA-Dataset/blob/main/time_series_forcasting/Time_series.html) | [📋 Documentation](time_series_forcasting/README.md)
 
 **Key Results:**
 - Test R²: 0.93 (outperforms XGBoost for multi-step)

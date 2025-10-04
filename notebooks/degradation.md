@@ -21,7 +21,7 @@ notebooks/
 
 **📄 View Complete Analysis:**
 
-[**→ View degradation.html** (Recommended - Always Works!)](degradation.html)
+[**→ View HTML Report** (Recommended - Always Works!)](https://htmlpreview.github.io/?https://github.com/AmitNaikRepository/AI-Battery-SOH-Degradation-TS-Anomaly-NASA-Dataset/blob/main/notebooks/degradation.html)
 
 *Alternative: [View Jupyter Notebook](degradation.ipynb) (may not render on GitHub)*
 

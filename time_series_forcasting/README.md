@@ -8,7 +8,7 @@ This project builds a **Long Short-Term Memory (LSTM)** neural network to predic
 
 **📄 View Complete Analysis:**
 
-[**→ View Time_series.html** (Recommended - Always Works!)](Time_series.html)
+[**→ View HTML Report** (Recommended - Always Works!)](https://htmlpreview.github.io/?https://github.com/AmitNaikRepository/AI-Battery-SOH-Degradation-TS-Anomaly-NASA-Dataset/blob/main/time_series_forcasting/Time_series.html)
 
 *Alternative: [View Jupyter Notebook](notebooks/Time_series.ipynb) (may not render on GitHub)*
 
