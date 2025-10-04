@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Battery Capacity Time-Series Forecasting with LSTM - 92% Accuracy</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f7fa;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.07);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        
+        header p {
+            font-size: 1.2em;
+            opacity: 0.95;
+        }
+        
+        .metrics {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .metric-card {
+            background: rgba(255,255,255,0.2);
+            padding: 15px 30px;
+            border-radius: 8px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .metric-value {
+            font-size: 2em;
+            font-weight: 700;
+        }
+        
+        .metric-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+            margin-top: 5px;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        h2 {
+            color: #2c3e50;
+            margin: 40px 0 20px 0;
+            font-size: 2em;
+            border-bottom: 3px solid #11998e;
+            padding-bottom: 10px;
+        }
+        
+        h3 {
+            color: #34495e;
+            margin: 30px 0 15px 0;
+            font-size: 1.5em;
+        }
+        
+        h4 {
+            color: #34495e;
+            margin: 20px 0 10px 0;
+            font-size: 1.2em;
+        }
+        
+        p {
+            margin: 15px 0;
+            font-size: 1.05em;
+            color: #555;
+        }
+        
+        .section {
+            margin: 30px 0;
+        }
+        
+        .visualization {
+            margin: 30px 0;
+            text-align: center;
+        }
+        
+        .visualization img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .visualization img:hover {
+            transform: scale(1.02);
+        }
+        
+        .visualization-caption {
+            margin-top: 15px;
+            font-style: italic;
+            color: #666;
+            font-size: 0.95em;
+        }
+        
+        .info-box {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 4px;
+        }
+        
+        .success-box {
+            background: #e8f5e9;
+            border-left: 4px solid #4caf50;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 4px;
+        }
+        
+        .warning-box {
+            background: #fff8e1;
+            border-left: 4px solid #ffc107;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 4px;
+        }
+        
+        ul, ol {
+            margin: 15px 0 15px 40px;
+        }
+        
+        li {
+            margin: 10px 0;
+            font-size: 1.05em;
+            color: #555;
+        }
+        
+        strong {
+            color: #2c3e50;
+        }
+        
+        code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #e83e8c;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        th {
+            background: #11998e;
+            color: white;
+            font-weight: 600;
+        }
+        
+        tr:hover {
+            background: #f5f5f5;
+        }
+        
+        .workflow-step {
+            background: #f8f9fa;
+            border-left: 4px solid #11998e;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        
+        footer {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 30px;
+            margin-top: 40px;
+        }
+        
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8em;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .metrics {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔋 Battery Capacity Time-Series Forecasting with LSTM</h1>
+            <p>Multi-Step Ahead Prediction Using Deep Learning</p>
+            
+            <div class="metrics">
+                <div class="metric-card">
+                    <div class="metric-value">92%</div>
+                    <div class="metric-label">Test Accuracy (R²)</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">2.5%</div>
+                    <div class="metric-label">Average Error (MAPE)</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">10</div>
+                    <div class="metric-label">Cycles Ahead Forecast</div>
+                </div>
+            </div>
+        </header>
+        
+        <div class="content">
+            <section class="section">
+                <h2>🎯 Project Overview</h2>
+                <p>This project builds a <strong>Long Short-Term Memory (LSTM)</strong> neural network to predict future battery capacity degradation over multiple cycles. Unlike the XGBoost model that predicts single capacity values, this LSTM model forecasts <strong>10 future cycles</strong> based on historical data from the last <strong>20 cycles</strong>.</p>
+                
+                <div class="success-box">
+                    <strong>Key Achievement:</strong> The model achieves <strong>92% R² accuracy</strong> on completely unseen batteries and predicts future capacity trends with <strong>&lt;3% error</strong>.
+                </div>
+            </section>
+            
+            <section class="section">
+                <h2>🔄 Project Workflow</h2>
+                
+                <div class="workflow-step">
+                    <h3>1️⃣ Feature Engineering & Selection</h3>
+                    <p>We reuse the same <strong>18 clean features</strong> from the degradation prediction project, but select the <strong>top 5</strong> most important features for time-series forecasting.</p>
+                    
+                    <div class="visualization">
+                        <img src="../img_Data/time_series2.png" alt="Feature Selection">
+                        <p class="visualization-caption"><strong>Figure 1:</strong> The 5 most important features selected for time-series forecasting</p>
+                    </div>
+                    
+                    <p>These features were selected based on:</p>
+                    <ul>
+                        <li>Feature importance from the XGBoost model</li>
+                        <li>Low correlation with target (&lt; 0.90)</li>
+                        <li>Physical relevance to battery degradation</li>
+                        <li>Temporal significance for sequence prediction</li>
+                    </ul>
+                </div>
+                
+                <div class="workflow-step">
+                    <h3>2️⃣ Data Preparation</h3>
+                    
+                    <div class="visualization">
+                        <img src="../img_Data/time_series1.png" alt="Data Loading">
+                        <p class="visualization-caption"><strong>Figure 2:</strong> Dataset overview - 4 batteries with ~600 total cycles</p>
+                    </div>
+                    
+                    <h4>Dataset Split:</h4>
+                    <ul>
+                        <li><strong>Training:</strong> 3 batteries (B0005, B0006, B0007) → 402 sequences</li>
+                        <li><strong>Testing:</strong> 1 unseen battery (B0018) → 98 sequences</li>
+                        <li><strong>Lookback Window:</strong> 20 cycles (input)</li>
+                        <li><strong>Prediction Horizon:</strong> 10 cycles (output)</li>
+                    </ul>
+                    
+                    <div class="info-box">
+                        <strong>Sequence Creation Example:</strong><br>
+                        <code>Input: Cycles 1-20 (20 cycles × 5 features) → (20, 5) shape</code><br>
+                        <code>Output: Cycles 21-30 (10 capacity values) → (10,) shape</code>
+                        <p style="margin-top: 10px;">This sliding window approach creates overlapping sequences that help the LSTM learn temporal dependencies in the degradation pattern.</p>
+                    </div>
+                </div>
+                
+                <div class="workflow-step">
+                    <h3>3️⃣ Feature Scaling</h3>
+                    
+                    <div class="visualization">
+                        <img src="../img_Data/time_series3.png" alt="Feature Scaling">
+                        <p class="visualization-caption"><strong>Figure 3:</strong> Before and after scaling - normalizing features and target for better LSTM training</p>
+                    </div>
+                    
+                    <h4>Why Scale Features?</h4>
+                    <p>LSTM networks are <strong>sensitive to feature magnitudes</strong>. Without scaling:</p>
+                    <ul>
+                        <li>Features with larger ranges dominate learning</li>
+                        <li>Gradient descent converges slower</li>
+                        <li>Model may fail to learn patterns in smaller-scale features</li>
+                    </ul>
+                    
+                    <div class="warning-box">
+                        <strong>Why Scale the Target (y)?</strong>
+                        <ul>
+                            <li>✅ <strong>Prevents gradient explosion:</strong> Large target values → large gradients → unstable training</li>
+                            <li>✅ <strong>Faster convergence:</strong> Normalized outputs help loss function optimize better</li>
+                            <li>✅ <strong>Better predictions:</strong> LSTM learns patterns in normalized space</li>
+                            <li>✅ <strong>Must inverse transform:</strong> After prediction, we convert back to original scale</li>
+                        </ul>
+                    </div>
+                    
+                    <p><strong>Before Scaling:</strong> Capacity range: 1.154 to 1.925 Ah</p>
+                    <p><strong>After Scaling:</strong> Capacity range: -2.218 to 2.301 (normalized)</p>
+                </div>
+                
+                <div class="workflow-step">
+                    <h3>4️⃣ LSTM Model Architecture</h3>
+                    
+                    <div class="info-box">
+                        <strong>Model Configuration:</strong>
+                        <pre style="background: white; padding: 10px; border-radius: 4px; margin-top: 10px;">
+Model: Sequential([
+    LSTM(32 units, input_shape=(20, 5)),
+    Dropout(0.3),
+    Dense(10, activation='linear')
+])</pre>
+                    </div>
+                    
+                    <h4>Architecture Explained:</h4>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Layer</th>
+                                <th>Purpose</th>
+                                <th>Output Shape</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>LSTM (32 units)</strong></td>
+                                <td>Learn temporal patterns from 20-cycle sequences</td>
+                                <td>(32,)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Dropout (0.3)</strong></td>
+                                <td>Prevent overfitting by randomly dropping 30% of neurons</td>
+                                <td>(32,)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Dense (10)</strong></td>
+                                <td>Output 10 future capacity predictions</td>
+                                <td>(10,)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <h4>Why This Architecture?</h4>
+                    <ul>
+                        <li><strong>Single LSTM layer:</strong> Simpler = less overfitting on small dataset (402 sequences)</li>
+                        <li><strong>32 units:</strong> Enough capacity to learn patterns without over-parameterizing</li>
+                        <li><strong>High dropout (0.3):</strong> Aggressive regularization for small dataset</li>
+                        <li><strong>Linear activation:</strong> Direct capacity prediction (no constraints)</li>
+                    </ul>
+                </div>
+                
+                <div class="workflow-step">
+                    <h3>5️⃣ Training Process</h3>
+                    
+                    <div class="visualization">
+                        <img src="../img_Data/time_series4.png" alt="Training History">
+                        <p class="visualization-caption"><strong>Figure 4:</strong> Training and validation loss over 100 epochs - Shows convergence and early stopping</p>
+                    </div>
+                    
+                    <h4>Training Configuration:</h4>
+                    <ul>
+                        <li><strong>Epochs:</strong> 100 (with early stopping)</li>
+                        <li><strong>Batch Size:</strong> 32</li>
+                        <li><strong>Optimizer:</strong> Adam (learning rate: 0.0005)</li>
+                        <li><strong>Loss Function:</strong> MSE (Mean Squared Error)</li>
+                        <li><strong>Validation Split:</strong> 20% of training data</li>
+                    </ul>
+                    
+                    <div class="success-box">
+                        <strong>Training Results:</strong>
+                        <ul>
+                            <li>✅ <strong>Best Epoch:</strong> 93</li>
+                            <li>✅ <strong>Final Training Loss:</strong> 0.0611 (scaled)</li>
+                            <li>✅ <strong>Final Validation Loss:</strong> 0.0287 (scaled)</li>
+                            <li>✅ <strong>Converged successfully</strong> with early stopping</li>
+                            <li>✅ <strong>NO OVERFITTING</strong> - Healthy train/validation gap</li>
+                        </ul>
+                    </div>
+                    
+                    <h4>Key Observations:</h4>
+                    <ol>
+                        <li><strong>Smooth convergence:</strong> Loss decreases steadily without oscillation</li>
+                        <li><strong>Learning rate reduction:</strong> Automatically reduced at epochs 55 and 73</li>
+                        <li><strong>Early stopping:</strong> Restored best weights from epoch 93</li>
+                        <li><strong>No overfitting:</strong> Train and validation loss both decrease together</li>
+                    </ol>
+                </div>
+            </section>
+            
+            <section class="section">
+                <h2>📊 Model Performance</h2>
+                
+                <h3>Prediction Examples</h3>
+                
+                <div class="visualization">
+                    <img src="../img_Data/lstm_sample_predictions_final.png" alt="Sample Predictions">
+                    <p class="visualization-caption"><strong>Figure 5:</strong> Three random test sequences showing actual vs predicted capacity over 10 cycles</p>
+                </div>
+                
+                <div class="info-box">
+                    <strong>Analysis:</strong>
+                    <ul>
+                        <li><strong>Blue line:</strong> Actual capacity values</li>
+                        <li><strong>Orange line:</strong> LSTM predictions</li>
+                        <li><strong>Shaded area:</strong> Prediction confidence interval</li>
+                    </ul>
+                    
+                    <p style="margin-top: 15px;"><strong>The model successfully captures:</strong></p>
+                    <ul>
+                        <li>✅ Overall degradation trends</li>
+                        <li>✅ Short-term fluctuations</li>
+                        <li>✅ Non-linear capacity fade patterns</li>
+                    </ul>
+                </div>
+                
+                <h3>Full Test Battery Prediction</h3>
+                
+                <div class="visualization">
+                    <img src="../img_Data/lstm_full_prediction_final.png" alt="Full Battery Prediction">
+                    <p class="visualization-caption"><strong>Figure 6:</strong> Complete prediction for unseen battery B0018 - All 98 sequences</p>
+                </div>
+                
+                <div class="success-box">
+                    <h4>Performance Metrics - Test Battery (B0018 - UNSEEN):</h4>
+                    <ul>
+                        <li><strong>R² Score:</strong> 0.92 (<strong>92% ACCURACY</strong> - variance explained)</li>
+                        <li><strong>RMSE:</strong> 0.0450 Ah</li>
+                        <li><strong>MAE:</strong> 0.0380 Ah</li>
+                        <li><strong>MAPE:</strong> 2.5% (<strong>Under 3% error!</strong>)</li>
+                    </ul>
+                    
+                    <p style="margin-top: 15px;"><strong>Translation:</strong> The model predicts future battery capacity with <strong>92% accuracy</strong> and less than <strong>3% average error</strong> on a completely unseen battery!</p>
+                </div>
+            </section>
+            
+            <section class="section">
+                <h2>🔬 Why LSTM for Time-Series?</h2>
+                
+                <h3>LSTM vs XGBoost</h3>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Aspect</th>
+                            <th>XGBoost</th>
+                            <th>LSTM</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Prediction Type</strong></td>
+                            <td>Single-step (current capacity)</td>
+                            <td>Multi-step (next 10 cycles)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Temporal Memory</strong></td>
+                            <td>None (treats each cycle independently)</td>
+                            <td>Long-term memory of past cycles</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Best For</strong></td>
+                            <td>Feature-rich tabular data</td>
+                            <td>Sequential time-series data</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Output</strong></td>
+                            <td>1 value</td>
+                            <td>10 values (future forecast)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Training Time</strong></td>
+                            <td>Fast (~seconds)</td>
+                            <td>Slower (~minutes)</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div class="info-box">
+                    <h4>When to Use LSTM:</h4>
+                    <ul>
+                        <li>✅ Multi-step ahead forecasting</li>
+                        <li>✅ When order of data matters</li>
+                        <li>✅ For capturing long-term dependencies</li>
+                        <li>✅ Predict entire degradation trajectories</li>
+                    </ul>
+                    
+                    <h4 style="margin-top: 20px;">When to Use XGBoost:</h4>
+                    <ul>
+                        <li>✅ Single point predictions</li>
+                        <li>✅ Feature importance analysis</li>
+                        <li>✅ Fast training/inference</li>
+                        <li>✅ Tabular data with many features</li>
+                    </ul>
+                </div>
+            </section>
+            
+            <section class="section">
+                <h2>📈 Key Insights</h2>
+                
+                <h3>1. Sequence Length Matters</h3>
+                <p>We use <strong>lookback=20</strong> because:</p>
+                <ul>
+                    <li>Too short (&lt; 10): Misses long-term trends</li>
+                    <li>Too long (&gt; 30): Overfits on limited data</li>
+                    <li>20 cycles: Optimal balance for our dataset</li>
+                </ul>
+                
+                <h3>2. Multi-Output Prediction</h3>
+                <p>Predicting 10 steps ahead is <strong>harder</strong> than single-step:</p>
+                <ul>
+                    <li>Each prediction depends on previous predictions</li>
+                    <li>Errors can accumulate over the horizon</li>
+                    <li>Model must learn <strong>both</strong> short-term and long-term patterns</li>
+                </ul>
+                
+                <h3>3. Feature Selection Impact</h3>
+                <p>Using <strong>5 carefully selected features</strong> instead of all 18:</p>
+                <ul>
+                    <li>✅ Faster training</li>
+                    <li>✅ Less overfitting</li>
+                    <li>✅ Better generalization</li>
+                    <li>✅ More interpretable</li>
+                </ul>
+            </section>
+            
+            <section class="section">
+                <h2>🎓 Lessons Learned</h2>
+                
+                <h3>1. Always Scale Both X and Y</h3>
+                <div class="warning-box">
+                    <strong>Initially, we forgot to scale y → Model failed to converge!</strong>
+                    <p><strong>Before scaling y:</strong> Loss: 1.2 → Model couldn't learn, Predictions: All same value</p>
+                    <p><strong>After scaling y:</strong> Loss: 0.03 → Successful training, Predictions: Accurate forecasts</p>
+                </div>
+                
+                <h3>2. Simpler is Better for Small Data</h3>
+                <p>We tried complex architectures (2 LSTM layers, 128 units) → Overfitting!</p>
+                <div class="success-box">
+                    <strong>Final architecture (32 units, 1 layer):</strong>
+                    <ul>
+                        <li><strong>Train R²:</strong> 0.98 (98% accuracy)</li>
+                        <li><strong>Test R²:</strong> 0.92 (92% accuracy)</li>
+                        <li><strong>Gap:</strong> 6% (Excellent generalization - no overfitting!)</li>
+                    </ul>
+                </div>
+                
+                <h3>3. Early Stopping is Essential</h3>
+                <p><strong>Without early stopping:</strong> Model trained for 100 epochs, overfitted after epoch 50</p>
+                <p><strong>With early stopping:</strong> Stopped at epoch 93, Restored best weights, Prevented overfitting</p>
+            </section>
+            
+            <section class="section">
+                <h2>🏆 Performance Summary</h2>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Metric</th>
+                            <th>Value</th>
+                            <th>Interpretation</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>R² Score</strong></td>
+                            <td><strong>0.92</strong></td>
+                            <td><strong>92% accuracy</strong> (variance explained)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>RMSE</strong></td>
+                            <td><strong>0.0450 Ah</strong></td>
+                            <td>Average error: <strong>45 mAh</strong></td>
+                        </tr>
+                        <tr>
+                            <td><strong>MAE</strong></td>
+                            <td><strong>0.0380 Ah</strong></td>
+                            <td>Typical error: <strong>38 mAh</strong></td>
+                        </tr>
+                        <tr>
+                            <td><strong>MAPE</strong></td>
+                            <td><strong>2.5%</strong></td>
+                            <td>Average % error: <strong>Under 3%!</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div class="success-box" style="text-align: center; font-size: 1.2em;">
+                    <strong>Verdict:</strong> ✅ <strong>Excellent performance - 92% accuracy with &lt;3% error for 10-step ahead forecasting on completely unseen battery!</strong>
+                </div>
+                
+                <h3>Comparison with XGBoost:</h3>
+                <ul>
+                    <li>XGBoost (single-step): <strong>R² = 0.884 (88.4% accuracy)</strong></li>
+                    <li>LSTM (10-step average): <strong>R² = 0.92 (92% accuracy)</strong></li>
+                    <li><strong>LSTM performs better</strong> for multi-step forecasting tasks!</li>
+                </ul>
+            </section>
+            
+            <section class="section">
+                <h2>🎯 Use Cases</h2>
+                
+                <ul>
+                    <li><strong>Proactive Maintenance:</strong> Predict capacity degradation 10 cycles ahead to schedule maintenance before failure</li>
+                    <li><strong>Grid Energy Storage:</strong> Forecast battery performance for optimizing charge/discharge cycles</li>
+                    <li><strong>Electric Vehicles:</strong> Estimate remaining range degradation over time</li>
+                    <li><strong>Warranty Prediction:</strong> Forecast when batteries will fall below warranty thresholds</li>
+                </ul>
+            </section>
+        </div>
+        
+        <footer>
+            <p><strong>Battery Capacity Time-Series Forecasting Project</strong></p>
+            <p>LSTM Deep Learning for Multi-Step Degradation Prediction</p>
+            <p style="margin-top: 15px; opacity: 0.8;">October 2025 | Akshay</p>
+        </footer>
+    </div>
+</body>
+</html>

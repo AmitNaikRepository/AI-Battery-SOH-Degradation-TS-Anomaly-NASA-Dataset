@@ -19,13 +19,11 @@ notebooks/
     └── xgboost_model.pkl       # Saved trained model
 ```
 
-**📓 View Complete Notebook:**
+**📄 View Complete Analysis:**
 
-[**→ View degradation.ipynb**](degradation.ipynb)
+[**→ View degradation.html** (Recommended - Always Works!)](degradation.html)
 
-*If GitHub shows "Unable to render code block":*
-- **Download the notebook** and open in Jupyter locally
-- Or view via [nbviewer](https://nbviewer.org/) by pasting the GitHub URL
+*Alternative: [View Jupyter Notebook](degradation.ipynb) (may not render on GitHub)*
 
 ## 📊 Dataset
 

@@ -6,13 +6,11 @@ This project builds a **Long Short-Term Memory (LSTM)** neural network to predic
 
 **Key Achievement**: The model achieves **92% R² accuracy** on completely unseen batteries and predicts future capacity trends with **<3% error**.
 
-**📓 View Notebook:**
+**📄 View Complete Analysis:**
 
-[**→ View Time_series.ipynb**](notebooks/Time_series.ipynb)
+[**→ View Time_series.html** (Recommended - Always Works!)](Time_series.html)
 
-*If GitHub shows "Unable to render code block":*
-- **Download the notebook** and open in Jupyter locally
-- Or view via [nbviewer](https://nbviewer.org/) by pasting the GitHub URL
+*Alternative: [View Jupyter Notebook](notebooks/Time_series.ipynb) (may not render on GitHub)*
 
 ---
 
