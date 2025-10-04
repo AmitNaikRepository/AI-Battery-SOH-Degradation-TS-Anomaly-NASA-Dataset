@@ -1,4 +1,4 @@
-# AI-Driven Battery Degradation Modeling with SOH/SOC & Anomaly Detection on NASA Battery Datasets
+# AI-Driven Battery Degradation Modeling with time_series prediction,  SOH/SOC & Anomaly Detection on NASA Battery Datasets
 
 > End-to-end AI  system for battery capacity prediction, health monitoring, and anomaly detection with time series 
 
@@ -16,10 +16,13 @@ This proejct demonstrates a complete battery health monitoring system built with
 
 **Key Achievement:** 
 
-### 88% accuracy on battery degradation .
-### 92% accuracy with the time series predction 
 
----
+### 88% accuracy on battery degradation .
+![Feature Engineering Overview](./img_Data/main_Readme1.png)
+### 92% accuracy with the time series predction 
+![Full Battery Prediction](./img_Data/lstm_full_prediction_final.png)---
+
+
 
 ## Projects
 
@@ -31,7 +34,7 @@ This proejct demonstrates a complete battery health monitoring system built with
 - **Features:** 18 engineered features (removed data leakage)
 - **Use Case:** State of Health (SOH) estimation, warranty cost prediction
 
-[View Details →](./notebooks/)
+[View Details →](notebooks\degradation.md)
 
 **Key Results:**
 - Train R²: 0.95 | Test R²: 0.88
@@ -68,7 +71,49 @@ This proejct demonstrates a complete battery health monitoring system built with
   - Batch CSV processing
   - Interactive visualizations
 
-[View Details →](./battery_health_monitoring/)
+[View Details →](./battery_health_monitoring\README.md)
+
+
+## Project Structure
+
+```
+battery-degradation-portfolio/
+├── README.md                          # This file
+├── requirements.txt                   # Python dependencies
+│
+├── data/                              # Raw and processed data
+│   └── all/
+│       └── 5_batteries.csv           # Main dataset
+│
+├── notebooks/                         # Jupyter notebooks
+│   ├── degradation.ipynb             # XGBoost training
+│   ├── feature_creation.ipynb        # Feature engineering
+│   └── modeling.ipynb                # Model experiments
+│
+├── time_series_forcasting/           # Project 2: LSTM
+│   ├── README.md                     # Detailed project docs
+│   ├── notebooks/
+│   │   └── lstm_forecasting.ipynb
+│   └── models/
+│       ├── lstm_capacity_forecast.h5
+│       └── lstm_config.pkl
+│
+├── battery_health_monitoring/        # Project 3: Dashboard
+│   ├── README.md
+│   ├── backend/
+│   │   ├── feature_engineer.py       # 5→18 feature generation
+│   │   ├── anomaly_detector.py       # Residual-based detection
+│   │   ├── soh_estimator.py          # SOH calculation
+│   │   └── xgboost_model.pkl         # Trained model
+│   └── frontend/
+│       └── streamlit_dashboard.py    # Web interface
+│
+├── results/                           # Model outputs
+│   ├── model_performance_single_battery.png
+│   └── model_temporal_split.png
+│
+└── scripts/                           # Utility scripts
+    └── battery_pipeline.py           # Data preprocessing
 
 **Components:**
 - **Anomaly Detection:** Flags unusual capacity drops
@@ -209,46 +254,7 @@ Navigate to `http://localhost:8501` in your browser.
 
 ---
 
-## Project Structure
 
-```
-battery-degradation-portfolio/
-├── README.md                          # This file
-├── requirements.txt                   # Python dependencies
-│
-├── data/                              # Raw and processed data
-│   └── all/
-│       └── 5_batteries.csv           # Main dataset
-│
-├── notebooks/                         # Jupyter notebooks
-│   ├── degradation.ipynb             # XGBoost training
-│   ├── feature_creation.ipynb        # Feature engineering
-│   └── modeling.ipynb                # Model experiments
-│
-├── time_series_forcasting/           # Project 2: LSTM
-│   ├── README.md                     # Detailed project docs
-│   ├── notebooks/
-│   │   └── lstm_forecasting.ipynb
-│   └── models/
-│       ├── lstm_capacity_forecast.h5
-│       └── lstm_config.pkl
-│
-├── battery_health_monitoring/        # Project 3: Dashboard
-│   ├── README.md
-│   ├── backend/
-│   │   ├── feature_engineer.py       # 5→18 feature generation
-│   │   ├── anomaly_detector.py       # Residual-based detection
-│   │   ├── soh_estimator.py          # SOH calculation
-│   │   └── xgboost_model.pkl         # Trained model
-│   └── frontend/
-│       └── streamlit_dashboard.py    # Web interface
-│
-├── results/                           # Model outputs
-│   ├── model_performance_single_battery.png
-│   └── model_temporal_split.png
-│
-└── scripts/                           # Utility scripts
-    └── battery_pipeline.py           # Data preprocessing
 ```
 
 ---
