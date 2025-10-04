@@ -19,7 +19,12 @@ notebooks/
     └── xgboost_model.pkl       # Saved trained model
 ```
 
-**📓 View Complete Notebook:** [degradation.ipynb](degradation.ipynb)
+**📓 View Complete Notebook:**
+- [![GitHub](https://img.shields.io/badge/GitHub-View%20Code-blue?logo=github)](degradation.ipynb)
+- [![nbviewer](https://img.shields.io/badge/nbviewer-View%20Rendered-orange?logo=jupyter)](https://nbviewer.org/github/AmitNaikRepository/AI-Driven-Battery-Degradation-Modeling-system/blob/main/notebooks/degradation.ipynb)
+- [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/AmitNaikRepository/AI-Driven-Battery-Degradation-Modeling-system/blob/main/notebooks/degradation.ipynb)
+
+> **Note:** If GitHub shows "Unable to render code block", use the nbviewer link above for better rendering.
 
 ## 📊 Dataset
 
