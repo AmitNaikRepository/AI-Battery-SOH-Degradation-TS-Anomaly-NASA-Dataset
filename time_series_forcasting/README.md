@@ -6,6 +6,8 @@ This project builds a **Long Short-Term Memory (LSTM)** neural network to predic
 
 **Key Achievement**: The model achieves **92% R² accuracy** on completely unseen batteries and predicts future capacity trends with **<3% error**.
 
+**Notebook**: [Time_series.ipynb](notebooks/Time_series.ipynb)
+
 ---
 
 ## 🔄 Project Workflow

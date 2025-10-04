@@ -4,6 +4,8 @@
 
 This project builds a machine learning model to predict battery capacity degradation using NASA battery dataset. The model achieves **88.4% R² accuracy (88% accurate predictions)** on unseen batteries with **zero data leakage**.
 
+**Notebook**: [degradation.ipynb](degradation.ipynb)
+
 ---
 ## 📁 Project Structure
 
