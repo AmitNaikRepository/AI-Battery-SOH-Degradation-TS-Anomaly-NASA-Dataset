@@ -7,11 +7,12 @@ This project builds a **Long Short-Term Memory (LSTM)** neural network to predic
 **Key Achievement**: The model achieves **92% R² accuracy** on completely unseen batteries and predicts future capacity trends with **<3% error**.
 
 **📓 View Notebook:**
-- [![GitHub](https://img.shields.io/badge/GitHub-View%20Code-blue?logo=github)](notebooks/Time_series.ipynb)
-- [![nbviewer](https://img.shields.io/badge/nbviewer-View%20Rendered-orange?logo=jupyter)](https://nbviewer.org/github/AmitNaikRepository/AI-Driven-Battery-Degradation-Modeling-system/blob/main/time_series_forcasting/notebooks/Time_series.ipynb)
-- [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/AmitNaikRepository/AI-Driven-Battery-Degradation-Modeling-system/blob/main/time_series_forcasting/notebooks/Time_series.ipynb)
 
-> **Note:** If GitHub shows "Unable to render code block", use the nbviewer link above for better rendering.
+[**→ View Time_series.ipynb**](notebooks/Time_series.ipynb)
+
+*If GitHub shows "Unable to render code block":*
+- **Download the notebook** and open in Jupyter locally
+- Or view via [nbviewer](https://nbviewer.org/) by pasting the GitHub URL
 
 ---
 
