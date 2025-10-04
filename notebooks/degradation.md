@@ -19,6 +19,8 @@ notebooks/
     └── xgboost_model.pkl       # Saved trained model
 ```
 
+**📓 View Complete Notebook:** [degradation.ipynb](degradation.ipynb)
+
 ## 📊 Dataset
 
 - **Source**: NASA Battery Dataset
