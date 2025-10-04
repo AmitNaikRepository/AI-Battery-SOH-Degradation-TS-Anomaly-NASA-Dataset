@@ -18,9 +18,11 @@ This proejct demonstrates a complete battery health monitoring system built with
 
 
 ### 88% accuracy on battery degradation .
-![Feature Engineering Overview](./img_Data/main_Readme1.png)
+![Feature Engineering Overview](img_Data/main_Readme1.png)
 ### 92% accuracy with the time series predction 
-![Full Battery Prediction](./img_Data/lstm_full_prediction_final.png)---
+![Full Battery Prediction](img_Data/lstm_full_prediction_final.png)
+
+---
 
 
 
@@ -34,7 +36,7 @@ This proejct demonstrates a complete battery health monitoring system built with
 - **Features:** 18 engineered features (removed data leakage)
 - **Use Case:** State of Health (SOH) estimation, warranty cost prediction
 
-[View Details →](notebooks\degradation.md)
+[View Details →](notebooks/degradation.md)
 
 **Key Results:**
 - Train R²: 0.95 | Test R²: 0.88
@@ -51,7 +53,7 @@ This proejct demonstrates a complete battery health monitoring system built with
 - **Architecture:** 2-layer LSTM (128→64 units)
 - **Prediction:** 10 cycles ahead using last 20 cycles
 
-[View Details →](./time_series_forcasting/)
+[View Details →](time_series_forcasting/README.md)
 
 **Key Results:**
 - Test R²: 0.93 (outperforms XGBoost for multi-step)
@@ -71,7 +73,7 @@ This proejct demonstrates a complete battery health monitoring system built with
   - Batch CSV processing
   - Interactive visualizations
 
-[View Details →](./battery_health_monitoring\README.md)
+[View Details →](battery_health_monitoring/README.md)
 
 
 ## Project Structure
