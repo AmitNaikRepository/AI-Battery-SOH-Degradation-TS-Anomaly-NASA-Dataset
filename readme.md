@@ -1,4 +1,4 @@
-# AI-Driven Battery Degradation Modeling with time_series prediction,  SOH/SOC & Anomaly Detection on NASA Battery Datasets
+# AI-Driven Battery Degradation Modeling with time_series prediction,  SOH/SOC & Anomaly Detection 
 
 > End-to-end AI  system for battery capacity prediction, health monitoring, and anomaly detection with time series 
 
